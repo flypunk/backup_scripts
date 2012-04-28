@@ -12,3 +12,5 @@ For other distros check http://s3tools.org/repositories
 
 Take a look at http://s3tools.org/s3cmd for detailed setup instructions, but
 basically you just need to run s3cmd --configure
+
+The backup scripts assume that you have a bucket named backups.yourcompany.com
