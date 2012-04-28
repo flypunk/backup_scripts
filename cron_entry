@@ -1,0 +1,9 @@
+###
+# Add the content of this file (edited for your settings) to the end
+# of /etc/crontab file
+# It will run the backup script every day at 2 AM and send any output
+# to your email
+###
+
+MAILTO=you@yourdomain.com
+00 2    * * *   root    /full/path/to/backup/script
