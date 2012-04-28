@@ -1,2 +1,2 @@
-Everybody needs to back up their files DBs to an S3 bucket.
+Everybody needs to back up their files and/or DBs to an S3 bucket.
 This is a collection of short shell scripts that do just that.
