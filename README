@@ -1,2 +1,14 @@
 Everybody needs to back up their files and/or DBs to an S3 bucket.
 This is a collection of short shell scripts that do just that.
+
+The scripts use s3cmd for uploading the files to S3.
+To install this tool on Debian/Ubuntu systems:
+
+wget -O- -q http://s3tools.org/repo/deb-all/stable/s3tools.key | sudo apt-key add -
+sudo wget -O/etc/apt/sources.list.d/s3tools.list http://s3tools.org/repo/deb-all/stable/s3tools.list
+sudo wget -O/etc/apt/sources.list.d/s3tools.list http://s3tools.org/repo/deb-all/stable/s3tools.list
+
+For other distros check http://s3tools.org/repositories
+
+Take a look at http://s3tools.org/s3cmd for detailed setup instructions, but
+basically you just need to run s3cmd --configure
