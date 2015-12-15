@@ -1,10 +1,13 @@
 #!/bin/bash
 # This script dumps all the mongo DBs on the local host and uploads them
-# to an S3 bucket
+# to an object store.
 # See http://www.mongodb.org/display/DOCS/Import+Export+Tools for mongodump options
-# Change the variables in ALL_CAPS to match your environment
+# Change the variables to match your environment
 
 dest_dir=/tmp
+dump_type=idftrees
+destination=gs://bhs-bhp-backup/mongo/
+
 cd $dest_dir
 /usr/bin/mongodump 1>/dev/null # Suppress stdout for better cron compatibility
 
@@ -13,14 +16,25 @@ if [ $? -ne 0 ]
     exit 1
 fi
 
-dumpname=mongo-`hostname`-`date +%Y-%b-%d`.tgz
+dumpname=$dump_type-`date +%Y-%b-%d`.tgz
 tar -czf $dumpname dump
 rm -rf dump
-    
-s3cmd --config=/root/.s3cfg --no-progress put $dumpname s3://backups.YOURCOMPANY.com/
-    if [ $? -ne 0 ]
-        then echo "Upload to S3 was not successfull"
-        exit 1
-    fi
+
+destination_type=$(echo $destination | cut -c1-3)
+
+if [ "$destination_type" == "gs:" ]; then
+    upload_command="/usr/local/bin/gsutil -q cp $dumpname $destination"
+elif [ "$destination_type" == "s3:" ]; then
+    upload_command="s3cmd --config=/home/ftapp/.s3cfg --no-progress put $dumpname $destination"
+else
+    echo "Don't know how to upload to $destination"
+    exit 1
+fi
+
+$upload_command
+if [ $? -ne 0 ]
+    then echo "Upload to $destination was not successfull"
+    exit 1
+fi
 
 rm $dumpname
